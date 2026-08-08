@@ -1,0 +1,38 @@
+[
+  {
+    "id": "5G-BUKIT-BINTANG-04",
+    "lat": 3.1466,
+    "lng": 101.7100,
+    "location": "Pavilion Intersection",
+    "baseLST": 36.5,
+    "baseDensity": 1.8,
+    "networkPenalty": 45
+  },
+  {
+    "id": "5G-PUDU-09",
+    "lat": 3.1340,
+    "lng": 101.7130,
+    "location": "Pudu Commercial Dist",
+    "baseLST": 37.0,
+    "baseDensity": 1.9,
+    "networkPenalty": 40
+  },
+  {
+    "id": "5G-CHOW-KIT-02",
+    "lat": 3.1633,
+    "lng": 101.6980,
+    "location": "Chow Kit Market",
+    "baseLST": 35.0,
+    "baseDensity": 1.6,
+    "networkPenalty": 35
+  },
+  {
+    "id": "5G-KLCC-01",
+    "lat": 3.1578,
+    "lng": 101.7116,
+    "location": "KLCC Park Edge",
+    "baseLST": 31.5,
+    "baseDensity": 1.2,
+    "networkPenalty": 20
+  }
+]
