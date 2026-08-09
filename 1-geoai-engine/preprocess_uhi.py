@@ -3,6 +3,7 @@ import pandas as pd
 import rasterio
 import json
 import os
+import joblib
 from shapely.geometry import Point
 
 # Define Paths (Ensure your dataset files are placed in the 'data' folder)
@@ -21,10 +22,10 @@ def get_temperature_at_point(lon, lat, raster_dataset):
         return 32.0 # Fallback average KL temperature
 
 def run_geoai_pipeline():
-    print("🚀 Initializing GeoAI Data Fusion Engine...")
+    print("Initializing GeoAI Data Fusion Engine...")
     
     # 1. Load the 5G Network Nodes (Ookla Open Data)
-    print("📡 Ingesting Ookla Network Parquet...")
+    print("Ingesting Ookla Network Parquet...")
     try:
         # Load as a standard pandas DataFrame first
         ookla_df = pd.read_parquet(OOKLA_PARQUET)
@@ -41,7 +42,7 @@ def run_geoai_pipeline():
         kl_nodes = ookla_gdf.cx[kl_bounds[0]:kl_bounds[2], kl_bounds[1]:kl_bounds[3]].head(50)
         
     except Exception as e:
-        print(f"⚠️ Could not load real Ookla data ({e}). Generating realistic synthetic coordinates for KL.")
+        print(f"Could not load real Ookla data ({e}). Generating realistic synthetic coordinates for KL.")
         kl_nodes = pd.DataFrame({
             'quadkey': ['5G-BUKIT-BINTANG-04', '5G-PUDU-09', '5G-CHOW-KIT-02', '5G-KLCC-01', '5G-SENTRAL-07'],
             'avg_lat_ms': [45, 40, 35, 20, 38], 
@@ -54,8 +55,16 @@ def run_geoai_pipeline():
     try:
         src = rasterio.open(LANDSAT_TIF)
     except FileNotFoundError:
-        print("⚠️ Landsat TIF not found. Waiting on USGS download. Using baseline temps.")
+        print("Landsat TIF not found. Waiting on USGS download. Using baseline temps.")
         src = None
+
+    # --- NEW: Load the Trained Machine Learning Model ---
+    print("Loading Trained Machine Learning Model...")
+    try:
+        ml_model = joblib.load('models/thermal_model.joblib')
+    except FileNotFoundError:
+        print("ML Model not found. Run train_model.py first!")
+        ml_model = None
 
     # 3. Process the Nodes and calculate UHI metrics
     processed_data = []
@@ -67,11 +76,19 @@ def run_geoai_pipeline():
         # Determine Temperature
         base_lst = get_temperature_at_point(lon, lat, src) if src else 35.0
         
-        # Calculate Concrete Density (Mocked logic for OSM intersection)
+        # Calculate Concrete Density
         base_density = round(1.2 + (row['avg_lat_ms'] / 100), 2) 
         
-        # DYNAMIC FINANCIAL & HARDWARE METRICS
+        # Network Load Penalty
         network_penalty = int(row['avg_lat_ms'])
+        
+        # --- NEW: AI INFERENCE ---
+        if ml_model:
+            # Format the features exactly as the model expects them
+            features = pd.DataFrame([[base_lst, base_density, network_penalty]], columns=['baseLST', 'baseDensity', 'networkPenalty'])
+            predicted_risk = ml_model.predict(features)[0]
+        else:
+            predicted_risk = 50.0 # Fallback if model isn't loaded
         
         node_data = {
             "id": str(row['quadkey']),
@@ -81,9 +98,10 @@ def run_geoai_pipeline():
             "baseLST": base_lst,
             "baseDensity": base_density,
             "networkPenalty": network_penalty,
-            "basePowerW": 11577 + (network_penalty * 10), # Base 5G power + load factor
-            "tnbRateKwh": 0.435,                          # Real TNB commercial tariff
-            "coolingDependency": 0.35                     # 35% of power goes to thermal management
+            "basePowerW": 11577 + (network_penalty * 10),
+            "tnbRateKwh": 0.435,
+            "coolingDependency": 0.35,
+            "geoAiProb": round(predicted_risk, 1)  # Real ML prediction injected here!
         }
         processed_data.append(node_data)
         
@@ -92,7 +110,7 @@ def run_geoai_pipeline():
     with open(OUTPUT_JSON, 'w') as f:
         json.dump(processed_data, f, indent=4)
         
-    print(f"✅ Pipeline Complete! {len(processed_data)} real nodes exported to Java API.")
+    print(f"Pipeline Complete! {len(processed_data)} real nodes exported to Java API.")
 
 if __name__ == "__main__":
     run_geoai_pipeline()
