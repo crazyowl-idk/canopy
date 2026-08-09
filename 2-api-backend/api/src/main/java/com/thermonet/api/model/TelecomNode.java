@@ -8,6 +8,11 @@ public class TelecomNode {
     private double baseLST;
     private double baseDensity;
     private int networkPenalty;
+    
+    // NEW: Dynamic Financial & Hardware Metrics
+    private int basePowerW;
+    private double tnbRateKwh;
+    private double coolingDependency;
 
     // Getters
     public String getId() { return id; }
@@ -17,6 +22,9 @@ public class TelecomNode {
     public double getBaseLST() { return baseLST; }
     public double getBaseDensity() { return baseDensity; }
     public int getNetworkPenalty() { return networkPenalty; }
+    public int getBasePowerW() { return basePowerW; }
+    public double getTnbRateKwh() { return tnbRateKwh; }
+    public double getCoolingDependency() { return coolingDependency; }
 
     // Setters
     public void setId(String id) { this.id = id; }
@@ -26,4 +34,7 @@ public class TelecomNode {
     public void setBaseLST(double baseLST) { this.baseLST = baseLST; }
     public void setBaseDensity(double baseDensity) { this.baseDensity = baseDensity; }
     public void setNetworkPenalty(int networkPenalty) { this.networkPenalty = networkPenalty; }
+    public void setBasePowerW(int basePowerW) { this.basePowerW = basePowerW; }
+    public void setTnbRateKwh(double tnbRateKwh) { this.tnbRateKwh = tnbRateKwh; }
+    public void setCoolingDependency(double coolingDependency) { this.coolingDependency = coolingDependency; }
 }
