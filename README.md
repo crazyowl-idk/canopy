@@ -53,4 +53,4 @@ Instead of relying purely on static thermodynamic formulas, the platform utilize
 
 *   **Event:** ASEAN GeoAI Fusion 2026 Hackathon
 *   **Challenge Domain:** Sustainability 
-*   **Author:*HACK-MY-068  YOW JIA YEN, VICTORIA KEW KIM TIAN, GOH CHING YEE* 
+*   **Author:** HACK-MY-068  YOW JIA YEN, VICTORIA KEW KIM TIAN, GOH CHING YEE
