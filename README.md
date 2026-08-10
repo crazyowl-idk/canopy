@@ -1,56 +1,56 @@
 # Canopy AI x ThermoNet 5G 🌳📡
 
-**The GeoAI Engine Bridging Urban Forestry and Digital Resilience**
+**A GeoAI planning prototype for urban cooling and digital resilience**
 
-High-density 5G micro-cells generate massive heat. In tropical urban centers like Kuala Lumpur, the Urban Heat Island (UHI) effect pushes this critical network hardware to failure points, leading to thermal throttling and localized outages. 
+High-density 5G equipment operates in hot, built-up urban environments where surface temperature, surrounding density and network-load proxies can be considered together during planning. In Kuala Lumpur, the Urban Heat Island (UHI) context makes it useful to explore where cooling interventions may warrant closer assessment.
 
-**Canopy AI x ThermoNet 5G** is a microservices platform that fuses environmental satellite data with telecommunications telemetry. By predicting hardware throttling using spatial Machine Learning, it allows city planners and telecom operators to collaboratively deploy natural cooling interventions (like targeted urban tree canopies) to protect digital infrastructure and calculate the exact financial ROI of those green investments.
+**Canopy AI x ThermoNet 5G** is a three-tier prototype that combines local spatial datasets, a Spring Boot REST API and a React micro-cooling simulator. It helps city planners and telecom stakeholders compare canopy and cool-roof scenarios, while clearly treating temperature, risk and cost outputs as planning estimates that require field calibration.
 
 ---
 
 ## ✨ Key Features
 
-*   **GeoAI Predictive Alerts:** Analyzes raw thermal and spatial data to predict the 72-hour probability of telecom hardware failure.
-*   **Targeted Cooling Simulator:** An interactive digital twin that allows city councils to model the thermodynamic impact of planting tree canopies or applying cool-roof coatings at specific GPS coordinates.
-*   **Dynamic Financial ROI:** Automatically calculates the annual HVAC energy savings for telecom operators based on the simulated temperature drops, using real-world commercial electricity tariffs.
-*   **Cross-Sector Data Fusion:** Bridges the gap between municipal greening budgets and enterprise telecommunications maintenance.
+*   **GeoAI Feature Pipeline:** Reads local Landsat and Ookla data, samples or falls back to surface-temperature values, and creates node features for a Kuala Lumpur prototype.
+*   **Targeted Cooling Simulator:** Lets users select a node and model tree-canopy area and cool-roof coverage at a specific map location.
+*   **Scenario-Based Energy Estimate:** Calculates an estimated annual cooling-energy saving using explicit prototype coefficients, node power, electricity tariff and cooling-dependency inputs.
+*   **Cross-Sector Planning View:** Connects urban heat, mobile-network proxies and cooling interventions in one stakeholder-facing dashboard.
 
 ---
 
 ## 🏗️ System Architecture
 
-The project is built on a modern, decoupled microservices architecture:
+The project uses a simple, decoupled three-tier prototype architecture:
 
 1. **GeoAI Data Fusion Engine (Python)**
-   * **Role:** Ingests and intersects real-world spatial datasets, calculates localized concrete density and thermal baselines, and executes the Machine Learning inference pipeline.
+   * **Role:** Reads local Ookla Parquet tiles, samples the Landsat raster when available, derives density and network-penalty proxies, and can run inference from a saved model artifact.
 2. **RESTful API Backend (Java / Spring Boot)**
-   * **Role:** Acts as the mathematical and financial routing hub. It serves the processed GeoAI intelligence to the frontend and calculates the dynamic financial ROI of cooling interventions using thermodynamic formulas.
+   * **Role:** Serves `processed_nodes.json` from the active API module as JSON through `GET /api/v1/nodes`.
 3. **Interactive Digital Twin UI (React.js / Vite)**
-   * **Role:** A dark-mode, map-based dashboard allowing users to visualize thermal strain, identify high-risk 5G nodes, and slide intervention parameters to see real-time environmental and financial impacts.
+   * **Role:** Displays the node list on a Leaflet map, applies client-side cooling-scenario formulas, and generates a browser-side executive PDF summary.
 
 ---
 
 ## 📊 Data Utilisation
 
-The platform achieves true GeoAI integration by fusing three distinct, real-world datasets:
+The prototype is designed around three local spatial data sources:
 
-*   **USGS Landsat 8-9:** Level-2 Thermal Infrared (Band 10) rasters used to establish the baseline Land Surface Temperature (LST) across the metro grid.
-*   **Ookla Open Data:** Mobile performance spatial network tiles (Parquet format) utilized to extract real-world network latency, acting as a proxy for RF hardware power load and internal heat generation.
-*   **OpenStreetMap (OSM):** 3D building footprint geometries used to calculate localized concrete density and map heat-trapping street canyons.
+*   **Landsat LST raster:** Used by `rasterio` to sample baseline land-surface temperature at Ookla-tile centroids. The pipeline uses a fallback temperature when the raster cannot be opened.
+*   **Ookla Open Data:** Mobile-performance tiles in Parquet format. Tile geometry is converted from WKT, filtered to a Kuala Lumpur bounding box, and average latency is used as a prototype network-penalty proxy.
+*   **OpenStreetMap (OSM) building GeoJSON:** Included as the intended source for urban-form features; it is not yet read by the current preprocessing script.
 
 ---
 
 ## 🧠 Machine Learning Core
 
-Instead of relying purely on static thermodynamic formulas, the platform utilizes a **Random Forest Regressor** to predict the realistic probability of hardware throttling. 
+The project includes a **Random Forest Regressor** to demonstrate the model-inference workflow. The current training script generates a synthetic 5,000-row dataset, so its output is a prototype throttling-risk score rather than a validated operational forecast.
 
-*   **Features ($X$):** The model evaluates the satellite surface temperature (`baseLST`), the urban concrete re-radiation factor (`baseDensity`), and the active network hardware load (`networkPenalty`).
-*   **Target ($Y$):** It outputs a continuous probability score representing the 72-hour risk of critical hardware failure, allowing for predictive maintenance rather than reactive repairs.
+*   **Features ($X$):** The model uses satellite surface temperature (`baseLST`), a density proxy (`baseDensity`), and a latency-derived network-penalty proxy (`networkPenalty`).
+*   **Target ($Y$):** The model is trained against synthetic `throttling_risk` values. A real deployment would require governed operator telemetry, historical events, evaluation metrics and calibration.
 
 ---
 
 ## 🏆 Project Context
 
 *   **Event:** ASEAN GeoAI Fusion 2026 Hackathon
-*   **Challenge Domain:** Sustainability 
+*   **Challenge Domain:** Sustainability
 *   **Author:** HACK-MY-068  YOW JIA YEN, VICTORIA KEW KIM TIAN, GOH CHING YEE

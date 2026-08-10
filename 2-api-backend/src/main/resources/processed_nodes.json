@@ -9,7 +9,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223003",
@@ -21,7 +22,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223012",
@@ -33,7 +35,8 @@
         "networkPenalty": 16,
         "basePowerW": 11737,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223013",
@@ -45,7 +48,8 @@
         "networkPenalty": 14,
         "basePowerW": 11717,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223020",
@@ -57,7 +61,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223021",
@@ -69,7 +74,8 @@
         "networkPenalty": 19,
         "basePowerW": 11767,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223022",
@@ -81,7 +87,8 @@
         "networkPenalty": 23,
         "basePowerW": 11807,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223023",
@@ -93,7 +100,8 @@
         "networkPenalty": 19,
         "basePowerW": 11767,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223030",
@@ -105,7 +113,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223031",
@@ -117,7 +126,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223032",
@@ -129,7 +139,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223033",
@@ -141,7 +152,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223102",
@@ -153,7 +165,8 @@
         "networkPenalty": 20,
         "basePowerW": 11777,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223103",
@@ -165,7 +178,8 @@
         "networkPenalty": 16,
         "basePowerW": 11737,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223112",
@@ -177,7 +191,8 @@
         "networkPenalty": 23,
         "basePowerW": 11807,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223113",
@@ -189,7 +204,8 @@
         "networkPenalty": 21,
         "basePowerW": 11787,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223120",
@@ -201,7 +217,8 @@
         "networkPenalty": 13,
         "basePowerW": 11707,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223121",
@@ -213,7 +230,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223122",
@@ -225,7 +243,8 @@
         "networkPenalty": 20,
         "basePowerW": 11777,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223123",
@@ -237,7 +256,8 @@
         "networkPenalty": 13,
         "basePowerW": 11707,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223130",
@@ -249,7 +269,8 @@
         "networkPenalty": 16,
         "basePowerW": 11737,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223131",
@@ -261,7 +282,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223132",
@@ -273,7 +295,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223133",
@@ -285,7 +308,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223200",
@@ -297,7 +321,8 @@
         "networkPenalty": 16,
         "basePowerW": 11737,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223201",
@@ -309,7 +334,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223202",
@@ -321,7 +347,8 @@
         "networkPenalty": 31,
         "basePowerW": 11887,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223203",
@@ -333,7 +360,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223210",
@@ -345,7 +373,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223211",
@@ -357,7 +386,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223212",
@@ -369,7 +399,8 @@
         "networkPenalty": 19,
         "basePowerW": 11767,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223213",
@@ -381,7 +412,8 @@
         "networkPenalty": 21,
         "basePowerW": 11787,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223220",
@@ -393,7 +425,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223221",
@@ -405,7 +438,8 @@
         "networkPenalty": 29,
         "basePowerW": 11867,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223222",
@@ -417,7 +451,8 @@
         "networkPenalty": 20,
         "basePowerW": 11777,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223223",
@@ -429,7 +464,8 @@
         "networkPenalty": 23,
         "basePowerW": 11807,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223230",
@@ -441,7 +477,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223231",
@@ -453,7 +490,8 @@
         "networkPenalty": 19,
         "basePowerW": 11767,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223232",
@@ -465,7 +503,8 @@
         "networkPenalty": 17,
         "basePowerW": 11747,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223233",
@@ -477,7 +516,8 @@
         "networkPenalty": 12,
         "basePowerW": 11697,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223300",
@@ -489,7 +529,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223301",
@@ -501,7 +542,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223302",
@@ -513,7 +555,8 @@
         "networkPenalty": 20,
         "basePowerW": 11777,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223303",
@@ -525,7 +568,8 @@
         "networkPenalty": 21,
         "basePowerW": 11787,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223310",
@@ -537,7 +581,8 @@
         "networkPenalty": 19,
         "basePowerW": 11767,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223311",
@@ -549,7 +594,8 @@
         "networkPenalty": 18,
         "basePowerW": 11757,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223312",
@@ -561,7 +607,8 @@
         "networkPenalty": 22,
         "basePowerW": 11797,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223313",
@@ -573,7 +620,8 @@
         "networkPenalty": 16,
         "basePowerW": 11737,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223320",
@@ -585,7 +633,8 @@
         "networkPenalty": 21,
         "basePowerW": 11787,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     },
     {
         "id": "1322320221223321",
@@ -597,6 +646,7 @@
         "networkPenalty": 14,
         "basePowerW": 11717,
         "tnbRateKwh": 0.435,
-        "coolingDependency": 0.35
+        "coolingDependency": 0.35,
+        "geoAiProb": 50.0
     }
 ]
