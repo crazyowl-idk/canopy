@@ -32,6 +32,10 @@ h3 { margin: 0 0 14px; font-size: 11px; text-transform: uppercase; letter-spacin
 .risk { display: grid; gap: 4px; border-color: #a16207; background: #2a2215; }
 .risk strong { color: #fcd780; font-size: 15px; }
 .risk span, .forecast small { color: #c8b984; font-size: 12px; line-height: 1.4; }
+.card-note { display: block; margin-top: 12px; color: #9db0c6; font-size: 11px; line-height: 1.45; }
+.decision-card p { margin: 0 0 12px; color: #f3f7fb; line-height: 1.45; font-weight: 600; }
+.decision-card div { margin-top: 8px; color: #c7d5e4; font-size: 12px; line-height: 1.45; }
+.decision-card strong { color: #ffffff; }
 .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
 .metric-box { min-height: 76px; padding: 11px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #2b4664; border-radius: 7px; background: #0b1727; }
 .metric-box span { color: #a8bad0; font-size: 11px; line-height: 1.3; }

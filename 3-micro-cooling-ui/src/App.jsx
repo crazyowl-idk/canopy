@@ -22,6 +22,18 @@ const treeIcon = L.divIcon({
   iconSize: [14, 14], iconAnchor: [7, 7],
 });
 
+const ASSET_PROFILES = [
+  { assetType: 'Shared 5G tower', criticality: 88, vulnerability: 72, lead: 'Tower operator + mobile operators' },
+  { assetType: 'Backhaul / fibre hub', criticality: 82, vulnerability: 58, lead: 'Network operator + utility provider' },
+  { assetType: 'Edge data cabinet', criticality: 92, vulnerability: 80, lead: 'Operator + building owner' },
+];
+
+const CLIMATE_SCENARIOS = [
+  { id: 'today', label: 'Today', uplift: 0 },
+  { id: 'warming-15', label: '+1.5°C planning', uplift: 1.5 },
+  { id: 'warming-20', label: '+2.0°C planning', uplift: 2 },
+];
+
 function MapController({ city, activeNode }) {
   const map = useMap();
   useEffect(() => {
@@ -57,13 +69,13 @@ function demoNodes(city) {
   }));
 }
 
-function calculateForecast(node, intervention) {
+function calculateForecast(node, intervention, climateUplift = 0) {
   const canopy = intervention.canopy || 0;
   const roof = intervention.roof || 0;
   // Prototype coefficients: replace with locally validated intervention studies before operational use.
   const temperatureDrop = canopy * 0.012 + roof * 0.018;
-  const currentTemp = node.baseLST - temperatureDrop;
-  const baselineStrain = node.baseLST * node.baseDensity + node.networkPenalty;
+  const currentTemp = node.baseLST + climateUplift - temperatureDrop;
+  const baselineStrain = (node.baseLST + climateUplift) * node.baseDensity + node.networkPenalty;
   const strain = Math.max(0, Math.min(100, (currentTemp * node.baseDensity) + node.networkPenalty - temperatureDrop * 2.5));
   const powerW = node.basePowerW || 11577;
   const tariff = node.tnbRateKwh || 0.435;
@@ -71,8 +83,17 @@ function calculateForecast(node, intervention) {
   const dailyCoolingCost = (powerW / 1000) * 24 * tariff * coolingDependency;
   const annualSavings = dailyCoolingCost * (temperatureDrop * 0.03) * 365;
   const calculatedRisk = Math.min(99, Math.max(15, Math.round(baselineStrain * 0.82)));
-  const risk = Number.isFinite(node.geoAiProb) ? Math.round(node.geoAiProb) : calculatedRisk;
-  return { canopy, roof, temperatureDrop, currentTemp, strain, annualSavings, dailyCoolingCost, risk, status: strain > 80 ? 'Critical' : strain > 65 ? 'Elevated' : 'Lower risk' };
+  const baselineRisk = Number.isFinite(node.geoAiProb) ? Math.round(node.geoAiProb + climateUplift * 2) : calculatedRisk;
+  const risk = Math.max(5, Math.round(baselineRisk - temperatureDrop * 3));
+  const criticality = node.criticality || 70;
+  const vulnerability = node.vulnerability || 50;
+  const resiliencePriority = Math.round(strain * .55 + criticality * .25 + vulnerability * .20);
+  const interventionCost = canopy * 45 + roof * 55;
+  const avoidedDowntime = Math.max(0, (baselineRisk - risk) * criticality * 1.5);
+  const annualBenefit = annualSavings + avoidedDowntime;
+  const paybackYears = annualBenefit > 0 && interventionCost > 0 ? interventionCost / annualBenefit : null;
+  const action = strain > 90 ? 'Heat-emergency response: inspect cooling, power and service continuity now.' : strain > 80 ? 'Prioritise a field thermal and power audit within 14 days.' : strain > 65 ? 'Inspect site conditions and optimise cooling before the next hot period.' : 'Monitor conditions and include this site in planned maintenance.';
+  return { canopy, roof, temperatureDrop, currentTemp, strain, annualSavings, dailyCoolingCost, baselineRisk, risk, criticality, vulnerability, resiliencePriority, interventionCost, avoidedDowntime, annualBenefit, paybackYears, action, status: strain > 80 ? 'Critical' : strain > 65 ? 'Elevated' : 'Lower risk' };
 }
 
 const format = (value, digits = 1) => new Intl.NumberFormat(undefined, { maximumFractionDigits: digits }).format(value);
@@ -131,13 +152,14 @@ function downloadExecutiveSummary({ city, node, forecast }) {
   nextText('Executive Cooling Scenario Summary', left, 752, 21, true);
   nextText(`${city.city}, ${city.country}  |  ${node.id}  |  Continued`, left, 731, 9, false, gray);
   nextRule(713);
-  nextHeading('Recommended next steps - from scenario to approval', 684);
-  nextRow('1. Verify site conditions', 'On-site heat, power and cooling readings', 654);
-  nextRow('2. Confirm intervention feasibility', 'Canopy/roof survey and site constraints', 614);
-  nextRow('3. Validate the financial case', 'Tariff, quote and maintenance review', 574);
-  nextRow('4. Calibrate the model', 'Field-measured outcomes replace coefficients', 534);
-  nextRow('5. Approve and monitor', 'Joint DBKL/MCMC/operator review', 494);
-  nextText('These steps turn the current scenario into an evidence-based implementation and oversight plan.', left, 466, 8, false, gray);
+  nextHeading('Recommended decision - from scenario to approval', 684);
+  nextRow('Resilience priority', `${forecast.resiliencePriority}/100 - ${forecast.status}`, 654);
+  nextRow('Accountable lead', node.lead || 'Joint operator and site-owner review', 614);
+  nextText(forecast.action, left, 588, 8, false, gray);
+  nextRow('1. Verify site conditions', 'On-site heat, power and cooling readings', 554);
+  nextRow('2. Confirm feasibility', 'Canopy/roof survey and site constraints', 514);
+  nextRow('3. Validate the financial case', 'Tariff, quote and maintenance review', 474);
+  nextText('Use aggregated, privacy-preserving telemetry and agreed security controls for a pilot.', left, 450, 8, false, gray);
   nextHeading('Implementation evidence - minimum data to collect', 420);
   nextRow('Environmental evidence', 'Weather, thermal and canopy metrics', 390);
   nextRow('Infrastructure evidence', 'Cabinet heat, traffic, power and HVAC data', 350);
@@ -172,6 +194,7 @@ export default function App() {
   const [apiNodes, setApiNodes] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [intervention, setIntervention] = useState({ canopy: 0, roof: 0 });
+  const [climateScenarioId, setClimateScenarioId] = useState('today');
   const [savedForecast, setSavedForecast] = useState(null);
 
   const city = CITY_OPTIONS.find(item => item.id === cityId);
@@ -183,32 +206,36 @@ export default function App() {
   }, []);
   useEffect(() => { setSelectedId(null); setIntervention({ canopy: 0, roof: 0 }); setSavedForecast(null); }, [cityId]);
 
-  const nodes = useMemo(() => cityId === 'kuala-lumpur' && apiNodes.length
+  const nodes = useMemo(() => (cityId === 'kuala-lumpur' && apiNodes.length
     ? apiNodes.map(node => ({ ...node, isDemo: true, tnbRateKwh: node.tnbRateKwh || city.tariff }))
-    : demoNodes(city), [city, cityId, apiNodes]);
+    : demoNodes(city)).map((node, index) => ({ ...node, ...ASSET_PROFILES[index % ASSET_PROFILES.length] })), [city, cityId, apiNodes]);
   const activeNode = nodes.find(node => node.id === selectedId);
-  const forecast = activeNode && calculateForecast(activeNode, intervention);
-  const criticalCount = nodes.filter(node => calculateForecast(node, { canopy: 0, roof: 0 }).strain > 80).length;
+  const climateScenario = CLIMATE_SCENARIOS.find(item => item.id === climateScenarioId);
+  const forecast = activeNode && calculateForecast(activeNode, intervention, climateScenario.uplift);
+  const criticalCount = nodes.filter(node => calculateForecast(node, { canopy: 0, roof: 0 }, climateScenario.uplift).strain > 80).length;
   const treePositions = activeNode ? Array.from({ length: Math.min(12, Math.floor(intervention.canopy / 40)) }, (_, i) => [activeNode.lat + ((i % 4) - 1.5) * 0.00035, activeNode.lng + (Math.floor(i / 4) - 1) * 0.00035]) : [];
   const roof = activeNode ? [[activeNode.lat + .0005, activeNode.lng + .0005], [activeNode.lat + .0005, activeNode.lng + .0011], [activeNode.lat + .0001, activeNode.lng + .0011], [activeNode.lat + .0001, activeNode.lng + .0005]] : [];
 
   return <div className="app">
     <header className="header">
-      <div className="brand-block"><div className="brand">CANOPY AI X THERMONET 5G</div><span className="title">Cooling scenario planner</span></div>
+      <div className="brand-block"><div className="brand">CANOPY AI X THERMONET 5G</div><span className="title">Digital-infrastructure resilience planner</span></div>
       <label className="city-picker">Location <select value={cityId} onChange={e => setCityId(e.target.value)}>{CITY_OPTIONS.map(item => <option key={item.id} value={item.id}>{item.city}, {item.country}</option>)}</select></label>
+      <label className="city-picker">Climate outlook <select value={climateScenarioId} onChange={e => setClimateScenarioId(e.target.value)}>{CLIMATE_SCENARIOS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
       <div className="header-metric"><span>Nodes shown</span><strong>{nodes.length}</strong><span>High strain: {criticalCount}</span></div>
     </header>
     <div className="notice"><strong>Prototype declaration:</strong> This hackathon demonstrator uses demo/aggregated inputs and hard-coded planning coefficients. Temperature, risk and cost outputs are scenario estimates - not live measurements or validated investment forecasts. Live operator telemetry, local climate studies and field calibration are required before operational or budget approval.</div>
     <div className="workspace">
       <main className="map-panel"><MapContainer center={[city.lat, city.lng]} zoom={12} style={{ height: '100%', width: '100%' }}><TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="© OpenStreetMap contributors" /><MapController city={city} activeNode={activeNode} />
-        {nodes.map(node => { const base = calculateForecast(node, { canopy: 0, roof: 0 }); const color = colorFor(base.strain); return <CircleMarker key={node.id} center={[node.lat, node.lng]} radius={node.id === selectedId ? 13 : 8} pathOptions={{ color, fillColor: color, fillOpacity: .75, weight: node.id === selectedId ? 3 : 1 }} eventHandlers={{ click: () => setSelectedId(node.id) }} />; })}
+        {nodes.map(node => { const base = calculateForecast(node, { canopy: 0, roof: 0 }, climateScenario.uplift); const color = colorFor(base.strain); return <CircleMarker key={node.id} center={[node.lat, node.lng]} radius={node.id === selectedId ? 13 : 8} pathOptions={{ color, fillColor: color, fillOpacity: .75, weight: node.id === selectedId ? 3 : 1 }} eventHandlers={{ click: () => setSelectedId(node.id) }} />; })}
         {activeNode && <Polygon positions={roof} pathOptions={{ color: intervention.roof ? '#60a5fa' : '#64748b', fillOpacity: .3 }} />}{treePositions.map((position, i) => <Marker key={i} position={position} icon={treeIcon} />)}
       </MapContainer></main>
-      <aside className="sidebar">{!activeNode ? <><h2>Choose a node</h2><p className="muted">Select a coloured point or choose a location below to create a cooling scenario.</p><div className="node-list">{nodes.map(node => { const base = calculateForecast(node, { canopy: 0, roof: 0 }); return <button key={node.id} className="node" onClick={() => setSelectedId(node.id)}><i style={{ background: colorFor(base.strain) }} /><span><strong>{node.id}</strong><small>{node.location}</small></span><b>{format(base.strain)}</b></button>; })}</div></> : <><button className="back" onClick={() => setSelectedId(null)}>← All nodes</button><div className="node-heading"><h2>{activeNode.id}</h2><span>Scenario estimate</span></div><p className="muted">{activeNode.location}</p>
-        <section className="risk"><strong>{forecast.risk}% predicted throttling risk</strong><span>Next 72 hours, based on the prototype thermal model.</span></section>
-        <section className="card"><h3>Current conditions</h3><div className="metric-grid"><div className="metric-box"><span>Surface temperature</span><b>{format(activeNode.baseLST)} °C</b></div><div className="metric-box"><span>Built-up multiplier</span><b>{format(activeNode.baseDensity, 2)}×</b></div><div className="metric-box"><span>Network-load penalty</span><b>+{activeNode.networkPenalty}</b></div><div className="metric-box"><span>Baseline strain</span><b style={{ color: colorFor(calculateForecast(activeNode, { canopy: 0, roof: 0 }).strain) }}>{format(calculateForecast(activeNode, { canopy: 0, roof: 0 }).strain)}</b></div></div></section>
+      <aside className="sidebar">{!activeNode ? <><h2>Choose an infrastructure site</h2><p className="muted">Each point represents a prototype asset site: a shared tower, backhaul hub or edge cabinet. Select one to build a resilience plan.</p><div className="node-list">{nodes.map(node => { const base = calculateForecast(node, { canopy: 0, roof: 0 }, climateScenario.uplift); return <button key={node.id} className="node" onClick={() => setSelectedId(node.id)}><i style={{ background: colorFor(base.strain) }} /><span><strong>{node.id}</strong><small>{node.assetType} · {node.location}</small></span><b>{format(base.resiliencePriority)}</b></button>; })}</div></> : <><button className="back" onClick={() => setSelectedId(null)}>← All sites</button><div className="node-heading"><h2>{activeNode.id}</h2><span>{activeNode.assetType}</span></div><p className="muted">{activeNode.location}</p>
+        <section className="risk"><strong>Priority {forecast.resiliencePriority}/100 · {forecast.status}</strong><span>{forecast.risk}% prototype throttling risk under the selected climate outlook.</span></section>
+        <section className="card"><h3>Site context</h3><div className="metric-grid"><div className="metric-box"><span>Surface temperature</span><b>{format(activeNode.baseLST + climateScenario.uplift)} °C</b></div><div className="metric-box"><span>Built-up multiplier</span><b>{format(activeNode.baseDensity, 2)}×</b></div><div className="metric-box"><span>Service criticality</span><b>{forecast.criticality}/100</b></div><div className="metric-box"><span>Community vulnerability</span><b>{forecast.vulnerability}/100</b></div></div><small className="card-note">Priority combines thermal strain (55%), service criticality (25%) and community vulnerability (20%).</small></section>
         <section className="card"><h3>Build your cooling plan</h3><label>Tree-canopy area <output>{intervention.canopy} m²</output><input type="range" min="0" max="500" step="10" value={intervention.canopy} onChange={e => setIntervention(v => ({ ...v, canopy: Number(e.target.value) }))} /></label><label>Cool-roof coverage <output>{intervention.roof}%</output><input type="range" min="0" max="100" step="5" value={intervention.roof} onChange={e => setIntervention(v => ({ ...v, roof: Number(e.target.value) }))} /></label></section>
-        <section className="forecast"><h3>Your predicted outcome</h3><div className="outcome-grid"><div><span>Temperature reduction</span><strong>−{format(forecast.temperatureDrop)} °C</strong></div><div><span>New surface temperature</span><strong>{format(forecast.currentTemp)} °C</strong></div><div className="outcome-wide"><span>Annual cooling-energy saving</span><strong>{city.currency} {format(forecast.annualSavings, 0)} / year</strong></div></div><small>Uses this demo assumption: each 1°C reduction saves 3% of cooling energy.</small><button className="save" onClick={() => { downloadExecutiveSummary({ city, node: activeNode, forecast }); setSavedForecast({ ...forecast, node: activeNode.id, city: city.city }); }}>Download executive PDF summary</button></section>
+        <section className="forecast"><h3>Scenario outcome and economic case</h3><div className="outcome-grid"><div><span>Temperature reduction</span><strong>−{format(forecast.temperatureDrop)} °C</strong></div><div><span>New surface temperature</span><strong>{format(forecast.currentTemp)} °C</strong></div><div><span>Annual energy saving</span><strong>{city.currency} {format(forecast.annualSavings, 0)}</strong></div><div><span>Potential avoided downtime</span><strong>{city.currency} {format(forecast.avoidedDowntime, 0)}</strong></div><div className="outcome-wide"><span>Indicative payback</span><strong>{forecast.paybackYears ? `${format(forecast.paybackYears, 1)} years` : 'Add an intervention to estimate'}</strong></div></div><small>Planning-only local-currency assumptions: capital cost, energy saving and avoided downtime must be replaced with site quotes and operator data.</small><button className="save" onClick={() => { downloadExecutiveSummary({ city, node: activeNode, forecast }); setSavedForecast({ ...forecast, node: activeNode.id, city: city.city }); }}>Download executive PDF summary</button></section>
+        <section className="card decision-card"><h3>Recommended decision</h3><p>{forecast.action}</p><div><strong>Accountable lead:</strong> {activeNode.lead}</div><div><strong>City / regulator role:</strong> convene approval, greening and data-governance review.</div><small className="card-note">Use aggregated, privacy-preserving telemetry for a pilot; share raw operational data only under agreed security controls.</small></section>
+        <section className="card decision-card"><h3>Before approval</h3><div><strong>Validate:</strong> compare satellite surface temperature with on-site cabinet/air sensors, weather, power and cooling readings.</div><div><strong>Integrate:</strong> send the approved priority to operator monitoring through the API; retain raw telemetry with its owner.</div><div><strong>Carbon check:</strong> confirm energy saved exceeds the intervention's maintenance and embodied-carbon impact.</div></section>
         {savedForecast && <section className="saved" role="status"><strong>Executive PDF downloaded</strong><span>{savedForecast.city} · {savedForecast.node}: −{format(savedForecast.temperatureDrop)} °C and {city.currency} {format(savedForecast.annualSavings, 0)}/year estimated saving.</span></section>}
       </>}</aside>
     </div>
