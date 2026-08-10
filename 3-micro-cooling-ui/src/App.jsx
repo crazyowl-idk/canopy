@@ -44,7 +44,12 @@ function MapController({ city, activeNode }) {
 }
 
 const CITY_NODE_PROFILES = {
-  'kuala-lumpur': [['CHOW-KIT', 'Chow Kit commercial district', 35.8, 1.72, 43, 11950], ['BANGSAR', 'Bangsar transit corridor', 34.1, 1.48, 31, 11200], ['KLCC', 'KLCC high-density core', 37.2, 1.91, 52, 12650]],
+  'kuala-lumpur': [
+    ['5G-BUKIT-BINTANG-04', 'Pavilion Intersection', 36.5, 1.8, 45, 11950],
+    ['5G-PUDU-09', 'Pudu Commercial Dist', 37.0, 1.9, 40, 11500],
+    ['5G-CHOW-KIT-02', 'Chow Kit Market', 35.0, 1.6, 35, 11300],
+    ['5G-KLCC-01', 'KLCC Park Edge', 31.5, 1.2, 20, 12650],
+  ],
   singapore: [['ORCHARD', 'Orchard Road retail corridor', 34.4, 1.78, 42, 12100], ['MARINA-BAY', 'Marina Bay financial district', 35.7, 1.88, 55, 13050], ['JURONG', 'Jurong East transport hub', 33.6, 1.42, 29, 11000]],
   jakarta: [['KUNINGAN', 'Kuningan business district', 37.8, 1.93, 57, 13200], ['SUDIRMAN', 'Sudirman office corridor', 36.9, 1.84, 49, 12500], ['KEMANG', 'Kemang mixed-use district', 35.2, 1.51, 34, 11400]],
   bangkok: [['SUKHUMVIT', 'Sukhumvit commercial corridor', 38.1, 1.89, 54, 12900], ['SILOM', 'Silom financial district', 37.3, 1.82, 47, 12300], ['CHATUCHAK', 'Chatuchak transport hub', 35.5, 1.46, 32, 11150]],
@@ -57,16 +62,39 @@ const CITY_NODE_PROFILES = {
 };
 
 function demoNodes(city) {
-  return CITY_NODE_PROFILES[city.id].map(([zone, location, baseLST, baseDensity, networkPenalty, basePowerW], index) => ({
-    id: `5G-${zone}-${String(index + 1).padStart(2, '0')}`,
-    lat: city.lat + (index - 1) * 0.012,
-    lng: city.lng + (index - 1) * 0.009,
-    location,
-    baseLST, baseDensity, networkPenalty, basePowerW,
-    tnbRateKwh: city.tariff,
-    coolingDependency: 0.35,
-    isDemo: true,
-  }));
+  const profile = CITY_NODE_PROFILES[city.id] || [];
+  return profile.map((item, index) => {
+    if (typeof item === 'object' && !Array.isArray(item) && item.id) {
+      const node = {
+        ...item,
+        basePowerW: item.basePowerW || 11577,
+        tnbRateKwh: city.tariff,
+        coolingDependency: 0.35,
+        isDemo: true,
+      };
+      return node;
+    }
+
+    const [zone, location, baseLST, baseDensity, networkPenalty, basePowerW] = item;
+    const fallbackId = Array.isArray(zone) ? zone[0] : zone;
+    const nodeId = typeof fallbackId === 'string' && fallbackId.toUpperCase().startsWith('5G-')
+      ? fallbackId
+      : `5G-${fallbackId}-${String(index + 1).padStart(2, '0')}`;
+
+    return {
+      id: nodeId,
+      lat: city.lat + (index - 1) * 0.012,
+      lng: city.lng + (index - 1) * 0.009,
+      location,
+      baseLST,
+      baseDensity,
+      networkPenalty,
+      basePowerW,
+      tnbRateKwh: city.tariff,
+      coolingDependency: 0.35,
+      isDemo: true,
+    };
+  });
 }
 
 function calculateForecast(node, intervention, climateUplift = 0) {
