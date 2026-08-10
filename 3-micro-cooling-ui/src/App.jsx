@@ -221,7 +221,10 @@ export default function App() {
       <div className="brand-block"><div className="brand">CANOPY AI X THERMONET 5G</div><span className="title">Digital-infrastructure resilience planner</span></div>
       <label className="city-picker">Location <select value={cityId} onChange={e => setCityId(e.target.value)}>{CITY_OPTIONS.map(item => <option key={item.id} value={item.id}>{item.city}, {item.country}</option>)}</select></label>
       <label className="city-picker">Climate outlook <select value={climateScenarioId} onChange={e => setClimateScenarioId(e.target.value)}>{CLIMATE_SCENARIOS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-      <div className="header-metric"><span>Nodes shown</span><strong>{nodes.length}</strong><span>High strain: {criticalCount}</span></div>
+      <div className="header-metric" aria-label={`${nodes.length} nodes shown; ${criticalCount} high-strain nodes`}>
+        <div><span>Nodes shown</span><strong>{nodes.length}</strong></div>
+        <div className={`high-strain ${criticalCount === 0 ? 'clear' : ''}`}><span>High strain</span><strong>{criticalCount}</strong></div>
+      </div>
     </header>
     <div className="notice"><strong>Prototype declaration:</strong> This hackathon demonstrator uses demo/aggregated inputs and hard-coded planning coefficients. Temperature, risk and cost outputs are scenario estimates - not live measurements or validated investment forecasts. Live operator telemetry, local climate studies and field calibration are required before operational or budget approval.</div>
     <div className="workspace">
