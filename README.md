@@ -27,7 +27,8 @@ The project uses a simple, decoupled three-tier prototype architecture:
    * **Role:** Serves `processed_nodes.json` from the active API module as JSON through `GET /api/v1/nodes`.
 3. **Interactive Digital Twin UI (React.js / Vite)**
    * **Role:** Displays the node list on a Leaflet map, applies client-side cooling-scenario formulas, and generates a browser-side executive PDF summary.
-
+   
+Due to GitHub file size limits, the heavy datasets (.tif and .parquet) are ignored via .gitignore.
 ---
 
 ## 📊 Data Utilisation
