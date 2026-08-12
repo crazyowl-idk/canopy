@@ -28,7 +28,8 @@ The project uses a simple, decoupled three-tier prototype architecture:
 3. **Interactive Digital Twin UI (React.js / Vite)**
    * **Role:** Displays the node list on a Leaflet map, applies client-side cooling-scenario formulas, and generates a browser-side executive PDF summary.
    
-Due to GitHub file size limits, the heavy datasets (.tif and .parquet) are ignored via .gitignore.
+* "Please note: Due to GitHub file size limits and standard version control practices, the heavy spatial datasets (.tif and .parquet) are excluded from this repository via .gitignore. The codebase is designed to process these locally."
+
 ---
 
 ## 📊 Data Utilisation
